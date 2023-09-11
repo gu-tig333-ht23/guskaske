@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.dark(),
@@ -73,12 +74,18 @@ class _MyHomePageState extends State<MyHomePage> {
               ];
             },
             onSelected: (value) {
-              if (value == 0) {
-                print('all'); // placeholder
-              } else if (value == 1) {
-                print('done'); // placeholder
-              } else if (value == 2) {
-                print('undone'); // placeholder
+              switch (value) {
+                case 0:
+                  print('all');
+                  break;
+                case 1:
+                  print('done');
+                  break;
+                case 2:
+                  print('undone');
+                  break;
+                default:
+                  break;
               }
             },
           ),
