@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import './main.dart';
 
 class AddView extends StatefulWidget {
   // view där nya tasks läggs till
   final String title;
-  final AddTaskCallback addTaskCallback;
+  //final AddTaskCallback addTaskCallback;
 
-  const AddView(
-      {super.key, required this.title, required this.addTaskCallback});
+  AddView({super.key, required this.title});
 
   @override
   State<AddView> createState() => _AddViewState();
@@ -17,19 +17,40 @@ class _AddViewState extends State<AddView> {
   final TextEditingController _taskController =
       TextEditingController(); // används för att hämta data från textfield
 
+  final snackBar = SnackBar(
+    content: const Text('Item added!'),
+    duration: Duration(seconds: 1),
+  );
+
   void _addTask() {
-    setState(() {
-      String taskText = _taskController.text; // hämta värdet från textfield
+    setState(
+      () {
+        String taskText = _taskController.text; // hämta värdet från textfield
 
-      if (taskText.isNotEmpty) {
-        // error check
-        widget.addTaskCallback(taskText);
-      }
+        if (taskText.isNotEmpty) {
+          context.read<AppState>().addTask(taskText);
+          _taskController.clear(); // Clear TextField
 
-      _taskController.clear(); // Clear TextField
-
-      Navigator.pop(context); // hoppa tillbaka till MyHomePage
-    });
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context); // hoppa tillbaka till MyHomePage
+        } else {
+          // error check
+          showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text(
+                        'No idem created. Todo item must contain text. Please try again'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Ok'),
+                        child: const Text('Ok'),
+                      ),
+                    ],
+                  ));
+        }
+      },
+    );
   }
 
   @override
