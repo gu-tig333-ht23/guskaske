@@ -22,13 +22,13 @@ class _AddViewState extends State<AddView> {
     duration: Duration(seconds: 1),
   );
 
-  void _addTask() {
+  void _addTask() async {
     setState(
       () {
         String taskText = _taskController.text; // hämta värdet från textfield
 
         if (taskText.isNotEmpty) {
-          context.read<AppState>().addTask(taskText);
+          context.read<AppState>().addTask(taskText); // skapar ny Task lokalt.
           _taskController.clear(); // Clear TextField
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);

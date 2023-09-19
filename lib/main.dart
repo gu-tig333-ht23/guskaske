@@ -3,18 +3,20 @@ import './task.dart';
 import './todo_item.dart';
 import './add_view.dart';
 import 'package:provider/provider.dart';
+import 'api_methods.dart';
 
 class AppState extends ChangeNotifier {
-  final List<Task> _tasks = [
-    Task('Write a book'),
-    Task('Do homework'),
-    Task('Tidy room', completed: true),
-    Task('Watch TV'),
-    Task('Nap'),
-    Task('Shop groceries'),
-    Task('Have fun'),
-    Task('Meditate'),
-  ];
+  List<Task> _tasks = [];
+
+  void fetchList() async {
+    var tasks = await ApiMethods.getList();
+    _tasks = tasks;
+    notifyListeners();
+  }
+
+  ApiMethods apiMethods = ApiMethods(); // Create an instance of ApiMethods
+
+  //final List<Task> _tasks = ApiMethods.getList();
 
   var selectedFilter = 'all';
 
@@ -37,27 +39,33 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTask(task) {
+  void addTask(task) async {
     // adds new task created in AddView
-    _tasks.add(Task(task));
-    notifyListeners();
+    Task newTask = Task(task);
+
+    await apiMethods.addTask(newTask);
+    fetchList();
   }
 
-  void removeTask(task) {
+  void removeTask(task) async {
     // removes task from List Task [_tasks]
-    _tasks.remove(task);
-    notifyListeners();
+    await apiMethods.removeTask(task);
+    fetchList();
   }
 
-  void checkBoxSwitch(task) {
+  void checkBoxSwitch(task) async {
     // changes completion status of Task[task]
-    task.completed = !task.completed;
-    notifyListeners();
+    Task onChange = task;
+    onChange.completed = !onChange.completed;
+    await apiMethods.updateTask(task);
+    fetchList();
   }
 }
 
 void main() {
   AppState state = AppState();
+
+  state.fetchList(); // updates Tasks list on startup
   runApp(
     ChangeNotifierProvider(
       create: (context) => state,
@@ -116,6 +124,7 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         onPressed: () {
+          //_doStuff();
           Navigator.push(
             context,
             MaterialPageRoute(
