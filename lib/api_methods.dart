@@ -14,8 +14,12 @@ class ApiMethods {
     http.Response response = await http.get(url);
     String body = response.body;
 
-    List<dynamic> jsonResponse = jsonDecode(body);
-    List<Task> tasks = jsonResponse.map((json) => Task.fromJson(json)).toList();
+    List<dynamic> jsonResponse =
+        jsonDecode(body); // converts body to list of json objects
+
+    List<Task> tasks = jsonResponse
+        .map((json) => Task.fromJson(json))
+        .toList(); // takes every item in jsonResponseList and returns items as [List] of class [Task]
 
     return tasks;
   }

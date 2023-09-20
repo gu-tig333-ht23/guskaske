@@ -2,59 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './main.dart';
 
-class AddView extends StatefulWidget {
+class AddView extends StatelessWidget {
   // view där nya tasks läggs till
   final String title;
-  //final AddTaskCallback addTaskCallback;
+  late BuildContext _context; // Store the context here
 
   AddView({super.key, required this.title});
 
-  @override
-  State<AddView> createState() => _AddViewState();
-}
-
-class _AddViewState extends State<AddView> {
-  final TextEditingController _taskController =
-      TextEditingController(); // används för att hämta data från textfield
-
+  final TextEditingController _taskController = TextEditingController();
+  // används för att hämta data från textfield
   final snackBar = SnackBar(
     content: const Text('Item added!'),
     duration: Duration(seconds: 1),
   );
 
-  void _addTask() async {
-    setState(
-      () {
-        String taskText = _taskController.text; // hämta värdet från textfield
+  void addTaskk() async {
+    final TextEditingController taskController = TextEditingController();
+    String taskText = taskController.text;
 
-        if (taskText.isNotEmpty) {
-          context.read<AppState>().addTask(taskText); // skapar ny Task lokalt.
-          _taskController.clear(); // Clear TextField
-
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          Navigator.pop(context); // hoppa tillbaka till MyHomePage
-        } else {
-          // error check
-          showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text(
-                        'No idem created. Todo item must contain text. Please try again'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Ok'),
-                        child: const Text('Ok'),
-                      ),
-                    ],
-                  ));
-        }
-      },
-    );
+    if (taskText.isNotEmpty) {
+      await _context.read<AppState>().addTask(taskText);
+      taskController.clear();
+      ScaffoldMessenger.of(_context).showSnackBar(snackBar);
+      Navigator.pop(_context);
+    } else {
+      // Error handling
+      showDialog<String>(
+        context: _context, // Use _context here
+        builder: (BuildContext context) => AlertDialog(
+            // ...
+            ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    _context = context; // Assign context to the _context variable
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -64,7 +49,7 @@ class _AddViewState extends State<AddView> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(widget.title),
+        title: Text(title),
         centerTitle: true,
       ),
       body: Center(
@@ -86,7 +71,7 @@ class _AddViewState extends State<AddView> {
                 height: 30,
               ),
               TextButton(
-                onPressed: _addTask,
+                onPressed: addTaskk,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
