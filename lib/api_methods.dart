@@ -12,16 +12,22 @@ class ApiMethods {
     Uri url = Uri.parse('$ENDPOINT/todos?key=$key');
 
     http.Response response = await http.get(url);
-    String body = response.body;
+    if (response.statusCode == 200) {
+      String body = response.body;
 
-    List<dynamic> jsonResponse =
-        jsonDecode(body); // converts body to list of json objects
+      List<dynamic> jsonResponse =
+          jsonDecode(body); // converts body to list of json objects
 
-    List<Task> tasks = jsonResponse
-        .map((json) => Task.fromJson(json))
-        .toList(); // takes every item in jsonResponseList and returns items as [List] of class [Task]
+      List<Task> tasks = jsonResponse
+          .map((json) => Task.fromJson(json))
+          .toList(); // takes every item in jsonResponseList and returns items as [List] of class [Task]
 
-    return tasks;
+      return tasks; // if server returns OK then parse the JSON
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load getList');
+    }
   }
 
   static Future<String> getKey() async {

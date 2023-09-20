@@ -2,44 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './main.dart';
 
-class AddView extends StatelessWidget {
+class AddView extends StatefulWidget {
   // view där nya tasks läggs till
   final String title;
-  late BuildContext _context; // Store the context here
+  //final AddTaskCallback addTaskCallback;
 
   AddView({super.key, required this.title});
 
-  final TextEditingController _taskController = TextEditingController();
-  // används för att hämta data från textfield
+  @override
+  State<AddView> createState() => _AddViewState();
+}
+
+class _AddViewState extends State<AddView> {
+  final TextEditingController _taskController =
+      TextEditingController(); // används för att hämta data från textfield
+
   final snackBar = SnackBar(
     content: const Text('Item added!'),
     duration: Duration(seconds: 1),
   );
 
-  void addTaskk() async {
-    final TextEditingController taskController = TextEditingController();
-    String taskText = taskController.text;
+  void _addTask() async {
+    setState(
+      () {
+        String taskText = _taskController.text; // hämta värdet från textfield
 
-    if (taskText.isNotEmpty) {
-      await _context.read<AppState>().addTask(taskText);
-      taskController.clear();
-      ScaffoldMessenger.of(_context).showSnackBar(snackBar);
-      Navigator.pop(_context);
-    } else {
-      // Error handling
-      showDialog<String>(
-        context: _context, // Use _context here
-        builder: (BuildContext context) => AlertDialog(
-            // ...
-            ),
-      );
-    }
+        if (taskText.isNotEmpty) {
+          context.read<AppState>().addTask(taskText); // skapar ny Task lokalt.
+          _taskController.clear(); // Clear TextField
+
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Navigator.pop(context); // hoppa tillbaka till MyHomePage
+        } else {
+          // error check
+          showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text(
+                        'No idem created. Todo item must contain text. Please try again'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Ok'),
+                        child: const Text('Ok'),
+                      ),
+                    ],
+                  ));
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    _context = context; // Assign context to the _context variable
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -49,7 +64,7 @@ class AddView extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(title),
+        title: Text(widget.title),
         centerTitle: true,
       ),
       body: Center(
@@ -71,7 +86,7 @@ class AddView extends StatelessWidget {
                 height: 30,
               ),
               TextButton(
-                onPressed: addTaskk,
+                onPressed: _addTask,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
