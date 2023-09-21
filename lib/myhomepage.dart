@@ -72,8 +72,14 @@ class ListViewBuilder extends StatelessWidget {
 
     return ListView.builder(
       itemBuilder: (context, index) {
-        return TodoItem(tasks[index]);
+        final task = tasks[index];
+        final key =  ValueKey<String?>(task.id);
+
+        return TodoItem(task,
+        key: key);
+        
       },
+      
       itemCount: itemCount,
     );
   }
