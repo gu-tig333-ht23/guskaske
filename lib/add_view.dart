@@ -22,13 +22,13 @@ class _AddViewState extends State<AddView> {
     duration: Duration(seconds: 1),
   );
 
-  void _addTask() {
+  void _addTask() async {
     setState(
       () {
         String taskText = _taskController.text; // hämta värdet från textfield
 
         if (taskText.isNotEmpty) {
-          context.read<AppState>().addTask(taskText);
+          context.read<AppState>().addTask(taskText); // skapar ny Task lokalt.
           _taskController.clear(); // Clear TextField
 
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -40,7 +40,7 @@ class _AddViewState extends State<AddView> {
               builder: (BuildContext context) => AlertDialog(
                     title: const Text('Error'),
                     content: const Text(
-                        'No idem created. Todo item must contain text. Please try again'),
+                        'No item created. Todo item must contain text. Please try again'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Ok'),

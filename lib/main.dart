@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import './task.dart';
-import './todo_item.dart';
-import './add_view.dart';
 import 'package:provider/provider.dart';
+import 'api_methods.dart';
+import 'myhomepage.dart';
 
 class AppState extends ChangeNotifier {
-  final List<Task> _tasks = [
-    Task('Write a book'),
-    Task('Do homework'),
-    Task('Tidy room', completed: true),
-    Task('Watch TV'),
-    Task('Nap'),
-    Task('Shop groceries'),
-    Task('Have fun'),
-    Task('Meditate'),
-  ];
+  List<Task> _tasks = [];
+
+  void fetchList() async {
+    var tasks = await ApiMethods.getList();
+    _tasks = tasks;
+    notifyListeners();
+  }
+
+  ApiMethods apiMethods = ApiMethods(); // Create an instance of ApiMethods
+
+  //final List<Task> _tasks = ApiMethods.getList();
 
   var selectedFilter = 'all';
 
@@ -37,27 +38,33 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addTask(task) {
+  Future<void> addTask(task) async {
     // adds new task created in AddView
-    _tasks.add(Task(task));
-    notifyListeners();
+    Task newTask = Task(task);
+
+    await apiMethods.addTask(newTask);
+    fetchList();
   }
 
-  void removeTask(task) {
+  void removeTask(task) async {
     // removes task from List Task [_tasks]
-    _tasks.remove(task);
-    notifyListeners();
+    await apiMethods.removeTask(task);
+    fetchList();
   }
 
-  void checkBoxSwitch(task) {
+  void checkBoxSwitch(task) async {
     // changes completion status of Task[task]
-    task.completed = !task.completed;
-    notifyListeners();
+    Task onChange = task;
+    onChange.completed = !onChange.completed;
+    await apiMethods.updateTask(task);
+    fetchList();
   }
 }
 
 void main() {
   AppState state = AppState();
+
+  state.fetchList(); // updates Tasks list on startup
   runApp(
     ChangeNotifierProvider(
       create: (context) => state,
@@ -81,77 +88,6 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(
         title: 'TIG169 TODO',
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title),
-        centerTitle: true,
-        actions: [
-          PopupMenuButton(
-            // filtrering av tasks
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem<String>(value: 'all', child: Text('all')),
-                PopupMenuItem<String>(value: 'done', child: Text('done')),
-                PopupMenuItem<String>(value: 'undone', child: Text('undone'))
-              ];
-            },
-            onSelected: (value) {
-              context.read<AppState>().setFilter(value);
-            }, //
-          ),
-        ],
-      ),
-      body: ListViewBuilder(),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.inverseSurface,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddView(
-                title: title,
-              ),
-            ),
-          );
-        },
-        tooltip: 'Add new task',
-        shape: CircleBorder(),
-        child: Center(
-          child: const Icon(
-            Icons.add,
-            size: 50,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ListViewBuilder extends StatelessWidget {
-  // separated to not rebuild whole MyHomePage on change of state.
-  const ListViewBuilder({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    var tasks = context.watch<AppState>().tasks;
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return TodoItem(tasks[index]);
-      },
-      itemCount: tasks.length,
     );
   }
 }

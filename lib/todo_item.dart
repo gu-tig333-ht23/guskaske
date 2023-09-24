@@ -6,8 +6,9 @@ import 'main.dart';
 class TodoItem extends StatelessWidget {
   // Skapar det visuella för klassen [Task]
   final Task task;
-  TodoItem(this.task, {super.key});
-
+  // Modify the constructor to accept a Key? parameter.
+  const TodoItem(this.task, {Key? key}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Column(
