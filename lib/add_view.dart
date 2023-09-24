@@ -40,7 +40,7 @@ class _AddViewState extends State<AddView> {
               builder: (BuildContext context) => AlertDialog(
                     title: const Text('Error'),
                     content: const Text(
-                        'No idem created. Todo item must contain text. Please try again'),
+                        'No item created. Todo item must contain text. Please try again'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Ok'),
