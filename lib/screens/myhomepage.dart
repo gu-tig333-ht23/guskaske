@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './todo_item.dart';
-import './add_view.dart';
+import '../app_state.dart';
+import '../todo_item.dart';
+import 'add_view.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
-import 'task.dart';
+import '../model.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key, required this.title});
@@ -73,13 +73,10 @@ class ListViewBuilder extends StatelessWidget {
     return ListView.builder(
       itemBuilder: (context, index) {
         final task = tasks[index];
-        final key =  ValueKey<String?>(task.id);
+        final key = ValueKey<String?>(task.id);
 
-        return TodoItem(task,
-        key: key);
-        
+        return TodoItem(task, key: key);
       },
-      
       itemCount: itemCount,
     );
   }

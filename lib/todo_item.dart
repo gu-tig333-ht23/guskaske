@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './task.dart';
-import 'main.dart';
+import 'app_state.dart';
+import 'model.dart';
 
 class TodoItem extends StatelessWidget {
   // Skapar det visuella för klassen [Task]
   final Task task;
   // Modify the constructor to accept a Key? parameter.
   const TodoItem(this.task, {Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,10 +34,10 @@ class TodoItem extends StatelessWidget {
                   child: Text(
                     task.task,
                     style: !task.completed
-                        ? Theme.of(context).textTheme.headlineSmall
+                        ? Theme.of(context).textTheme.bodyLarge
                         : Theme.of(context)
                             .textTheme
-                            .headlineSmall
+                            .bodyLarge
                             ?.copyWith(decoration: TextDecoration.lineThrough),
                   ),
                 ),
