@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:template/main.dart';
 import '../providers/app_state.dart';
 import '../widgets/todo_item.dart';
 import '../widgets/build_theme_toggle_button.dart';
@@ -19,7 +18,16 @@ class MyHomePage extends StatelessWidget {
         title: Text(title),
         centerTitle: true,
         actions: [
-          buildThemeToggleButton(context),
+          Padding(
+            padding: EdgeInsets.only(right: 70),
+            child: Row(
+              children: [
+                Icon(Icons.nightlight),
+                buildThemeToggleButton(context),
+                Icon(Icons.sunny),
+              ],
+            ),
+          ),
           PopupMenuButton(
             // filtrering av tasks
             itemBuilder: (context) {

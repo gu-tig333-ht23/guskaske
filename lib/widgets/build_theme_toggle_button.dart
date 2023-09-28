@@ -5,15 +5,12 @@ import '../providers/theme_provider.dart';
 
 Widget buildThemeToggleButton(BuildContext context) {
   final themeProvider = Provider.of<ThemeProvider>(context);
+  final themeMode = themeProvider.themeMode;
 
-  return IconButton(
-    icon: Icon(
-      themeProvider.themeMode == ThemeModeOption.light
-          ? Icons.brightness_4 // Icon for dark mode
-          : Icons.brightness_7, // Icon for light mode
-    ),
-    onPressed: () {
-      themeProvider.toggleTheme(); // Toggle the theme mode
-    },
-  );
+  return Switch(
+      value: themeMode == ThemeModeOption.light,
+      onChanged: (value) {
+        themeProvider.toggleTheme();
+      },
+      activeColor: Colors.amber);
 }
