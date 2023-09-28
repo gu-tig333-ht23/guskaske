@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'app_state.dart';
-import 'model.dart';
+import '../providers/app_state.dart';
+import '../model.dart';
 
 class TodoItem extends StatelessWidget {
   // Skapar det visuella för klassen [Task]
@@ -30,17 +30,15 @@ class TodoItem extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(left: 20),
-                  child: Text(
-                    task.task,
-                    style: !task.completed
-                        ? Theme.of(context).textTheme.bodyLarge
-                        : Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(decoration: TextDecoration.lineThrough),
-                  ),
-                ),
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(task.task,
+                        style: !task.completed
+                            ? Theme.of(context).textTheme.headlineSmall
+                            : Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                    decoration: TextDecoration.lineThrough))),
               ),
               GestureDetector(
                 onTap: () {

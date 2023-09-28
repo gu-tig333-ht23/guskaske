@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import '../app_state.dart';
-import '../todo_item.dart';
+import 'package:template/main.dart';
+import '../providers/app_state.dart';
+import '../widgets/todo_item.dart';
+import '../widgets/build_theme_toggle_button.dart';
 import 'add_view.dart';
 import 'package:provider/provider.dart';
 import '../model.dart';
@@ -13,10 +15,11 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.scrim,
         title: Text(title),
         centerTitle: true,
         actions: [
+          buildThemeToggleButton(context),
           PopupMenuButton(
             // filtrering av tasks
             itemBuilder: (context) {

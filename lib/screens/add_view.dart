@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../app_state.dart';
+import '../providers/app_state.dart';
 
 class AddView extends StatefulWidget {
   // view där nya tasks läggs till
@@ -19,7 +19,7 @@ class _AddViewState extends State<AddView> {
 
   final snackBar = SnackBar(
     content: const Text('Item added!'),
-    duration: Duration(seconds: 1),
+    duration: Duration(seconds: 2),
   );
 
   void _addTask() async {
@@ -57,7 +57,7 @@ class _AddViewState extends State<AddView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.scrim,
         leading: IconButton(
           icon: Icon(Icons.chevron_left, size: 40),
           onPressed: () {
