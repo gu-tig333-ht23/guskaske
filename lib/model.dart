@@ -1,7 +1,7 @@
 class Task {
   // klass för att skapa todo tasks
 
-  final String task;
+  String task;
   bool completed;
   final String? id;
 
@@ -15,5 +15,9 @@ class Task {
   Map<String, dynamic> toJson() {
     // convert [Task] to json format
     return {"title": task, 'done': completed};
+  }
+
+  void setTask(String value) {
+    task = value;
   }
 }

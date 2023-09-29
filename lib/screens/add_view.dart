@@ -36,18 +36,19 @@ class _AddViewState extends State<AddView> {
         } else {
           // error check
           showDialog<String>(
-              context: context,
-              builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text(
-                        'No item created. Todo item must contain text. Please try again'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Ok'),
-                        child: const Text('Ok'),
-                      ),
-                    ],
-                  ));
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              title: const Text('Error'),
+              content: const Text(
+                  'No item created. Todo item must contain text. Please try again'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Ok'),
+                  child: const Text('Ok'),
+                ),
+              ],
+            ),
+          );
         }
       },
     );

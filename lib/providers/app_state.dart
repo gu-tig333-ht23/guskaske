@@ -13,8 +13,6 @@ class AppState extends ChangeNotifier {
 
   ApiMethods apiMethods = ApiMethods(); // Create an instance of ApiMethods
 
-  //final List<Task> _tasks = ApiMethods.getList();
-
   var selectedFilter = 'all';
 
   List<Task> get tasks {
@@ -54,6 +52,12 @@ class AppState extends ChangeNotifier {
     // changes completion status of Task[task]
     Task onChange = task;
     onChange.completed = !onChange.completed;
+    await apiMethods.updateTask(task);
+    fetchList();
+  }
+
+  void editTaskText(task) async {
+    // for editing added task text
     await apiMethods.updateTask(task);
     fetchList();
   }

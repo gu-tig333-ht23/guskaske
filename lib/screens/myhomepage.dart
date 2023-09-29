@@ -17,17 +17,21 @@ class MyHomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.scrim,
         title: Text(title),
         centerTitle: true,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 70),
-            child: Row(
-              children: [
-                Icon(Icons.nightlight),
-                buildThemeToggleButton(context),
-                Icon(Icons.sunny),
-              ],
+        leading: Row(
+          children: [
+            Icon(
+              Icons.nightlight,
+              size: 20,
             ),
-          ),
+            buildThemeToggleButton(context),
+            Icon(
+              Icons.sunny,
+              size: 20,
+            ),
+          ],
+        ),
+        leadingWidth: 99,
+        actions: [
           PopupMenuButton(
             // filtrering av tasks
             itemBuilder: (context) {
@@ -47,7 +51,6 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.inverseSurface,
         onPressed: () {
-          //_doStuff();
           Navigator.push(
             context,
             MaterialPageRoute(
